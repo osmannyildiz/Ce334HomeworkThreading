@@ -9,7 +9,7 @@ public class Main {
 		String srcFileName = "img1";
 		String srcFileExtension = "jpg";
 		int numIterations = 100;
-		boolean multiThread = true;
+		boolean multiThread = false;
 		int numThreads = 8;
 		
 		System.out.println("Starting...");
@@ -37,7 +37,8 @@ public class Main {
 					runSingleThread(srcImg, dstImg, totalCount);
 				}
 				
-//				srcImg = dstImg;
+				// For pixel art mode, try setting numIterations to something like 5 and uncomment the line below
+				//srcImg = dstImg;
 			}
 			
 			endTime = System.nanoTime();
