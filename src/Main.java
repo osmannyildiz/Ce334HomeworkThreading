@@ -8,34 +8,41 @@ public class Main {
 	public static void main(String[] args) {
 		String srcFileName = "img1";
 		String srcFileExtension = "jpg";
+		int numIterations = 100;
 		boolean multiThread = true;
-		int numThreads = 32;
+		int numThreads = 8;
 		
 		System.out.println("Starting...");
 			
 		try {
 			File srcFile = new File("files/" + srcFileName + "." + srcFileExtension);
 			BufferedImage srcImg = ImageIO.read(srcFile);
-			int srcX = srcImg.getWidth();
-			int srcY = srcImg.getHeight();
-			int dstX = (int)Math.floor(srcX / 2);
-			int dstY = (int)Math.floor(srcY / 2);
-			BufferedImage dstImg = new BufferedImage(dstX, dstY, BufferedImage.TYPE_INT_RGB);
-			int totalCount = dstX * dstY;
+			BufferedImage dstImg = null;
 			long startTime, endTime;
 			
 			startTime = System.nanoTime();
 			System.out.println("Starting processing at " + startTime);
 			
-			if (multiThread) {
-				runMultiThread(srcImg, dstImg, totalCount, numThreads);
-			} else {
-				runSingleThread(srcImg, dstImg, totalCount);
+			for (int i = 0; i < numIterations; i++) {			
+				int srcX = srcImg.getWidth();
+				int srcY = srcImg.getHeight();
+				int dstX = (int)Math.floor(srcX / 2);
+				int dstY = (int)Math.floor(srcY / 2);
+				dstImg = new BufferedImage(dstX, dstY, BufferedImage.TYPE_INT_RGB);
+				int totalCount = dstX * dstY;
+				
+				if (multiThread) {
+					runMultiThread(srcImg, dstImg, totalCount, numThreads);
+				} else {
+					runSingleThread(srcImg, dstImg, totalCount);
+				}
+				
+//				srcImg = dstImg;
 			}
 			
 			endTime = System.nanoTime();
 			System.out.println("Ended processing at " + endTime);
-			System.out.println("The processing took " + (endTime - startTime) + "nanoseconds.");
+			System.out.println("The processing took " + ((endTime - startTime) / 1000000) + " milliseconds.");
 			
 			File dstFile = new File("files/" + srcFileName + "_out" + "." + srcFileExtension);
 			ImageIO.write(dstImg, srcFileExtension.toUpperCase(), dstFile);
