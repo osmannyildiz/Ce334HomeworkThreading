@@ -7,13 +7,14 @@ public class Main {
 
 	public static void main(String[] args) {
 		String srcFileName = "img1";
+		String srcFileExtension = "jpg";
 		boolean multiThread = false;
 		int numThreads = 32;
 		
 		System.out.println("start");
 			
 		try {
-			File srcFile = new File(srcFileName + ".jpg");
+			File srcFile = new File("files/" + srcFileName + "." + srcFileExtension);
 			BufferedImage srcImg = ImageIO.read(srcFile);
 			int srcX = srcImg.getWidth();
 			int srcY = srcImg.getHeight();
@@ -29,11 +30,12 @@ public class Main {
 				runSingleThread(srcImg, dstImg, totalCount);
 			}
 			// TODO Timer end
+			
+			File dstFile = new File("files/" + srcFileName + "_out" + "." + srcFileExtension);
+			ImageIO.write(dstImg, srcFileExtension.toUpperCase(), dstFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		// TODO Save to file etc.
 		
 		System.out.println("end");
 	}
